@@ -41,13 +41,14 @@ class _CardWidgetState extends State<CardWidget>
     final game = Provider.of<GameModel>(context);
     final card = game.cards[widget.index];
 
+    // Update animation based on card state
     if (card.isFaceUp != _isFaceUp) {
       if (card.isFaceUp) {
         _controller.forward();
       } else {
         _controller.reverse();
       }
-      _isFaceUp = card.isFaceUp;
+      _isFaceUp = card.isFaceUp; // Sync local state
     }
 
     return GestureDetector(
@@ -56,8 +57,13 @@ class _CardWidgetState extends State<CardWidget>
         animation: _animation,
         builder: (context, child) {
           final isFaceUp = card.isFaceUp || card.isMatched;
-          final angle = _animation.value * 1.5708; // 90 degrees
+          // Flip only to 90 degrees max (π/2)
+          final angle = _animation.value * 1.5708; // π/2 radians = 90 degrees
+
+          // Show front only when animation is past halfway
           final showFront = _animation.value > 0.5;
+
+          // Adjust the rotation direction based on the state
           final displayAngle =
               showFront ? (1 - _animation.value) * 1.5708 : angle;
 
