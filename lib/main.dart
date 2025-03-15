@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'game_model.dart';
+import 'card_widget.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(create: (context) => GameModel(), child: MyApp()),
+    ChangeNotifierProvider(
+      create: (context) => GameModel(),
+      child: MyApp(),
+    ),
   );
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: 'Card Matching Game', home: GameScreen());
+    return MaterialApp(
+      title: 'Card Matching Game',
+      home: GameScreen(),
+    );
   }
 }
 
@@ -31,30 +38,7 @@ class GameScreen extends StatelessWidget {
           ),
           itemCount: game.cards.length,
           itemBuilder: (context, index) {
-            final card = game.cards[index];
-            return GestureDetector(
-              onTap: () => game.flipCard(index),
-              child: Container(
-                decoration: BoxDecoration(
-                  color:
-                      card.isFaceUp || card.isMatched
-                          ? Colors.white
-                          : Colors.blue,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.black),
-                ),
-                child: Center(
-                  child:
-                      card.isFaceUp || card.isMatched
-                          ? Text(card.value, style: TextStyle(fontSize: 24))
-                          : Icon(
-                            Icons.question_mark,
-                            size: 40,
-                            color: Colors.white,
-                          ),
-                ),
-              ),
-            );
+            return CardWidget(index: index);
           },
         ),
       ),
